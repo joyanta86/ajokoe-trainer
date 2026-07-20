@@ -1,0 +1,58 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-brand-50: #eef4ff;
+  --color-brand-100: #d9e6ff;
+  --color-brand-200: #bcd3ff;
+  --color-brand-300: #8eb6ff;
+  --color-brand-400: #598eff;
+  --color-brand-500: #3366f2;
+  --color-brand-600: #1f47d8;
+  --color-brand-700: #003580; /* Finnish flag blue */
+  --color-brand-800: #002a66;
+  --color-brand-900: #001e4a;
+
+  --color-ink-50: #f7f8fa;
+  --color-ink-100: #eceef2;
+  --color-ink-200: #d9dde5;
+  --color-ink-300: #b6bdca;
+  --color-ink-400: #8b8f9f;
+  --color-ink-500: #64708a;
+  --color-ink-600: #47536b;
+  --color-ink-700: #333d52;
+  --color-ink-800: #1f2839;
+  --color-ink-900: #111826;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-ink-50);
+  color: var(--color-ink-900);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Keyboard focus ring, consistent across all interactive elements. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid var(--color-brand-500);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
