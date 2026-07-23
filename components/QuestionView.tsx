@@ -72,7 +72,13 @@ export function QuestionView({
       </header>
 
       <div className="px-5 py-5">
-        <h2 className="text-lg font-semibold leading-snug text-ink-900">{question.question}</h2>
+        {/* Finnish is the language of the real exam, so it leads; English follows in muted text. */}
+        <h2 className="text-lg font-semibold leading-snug text-ink-900">
+          {question.questionFi ?? question.question}
+        </h2>
+        {question.questionFi ? (
+          <p className="mt-1 text-sm leading-snug text-ink-500">{question.question}</p>
+        ) : null}
 
         {question.diagram ? (
           <RoadDiagram diagram={question.diagram} className="mt-4 max-w-md" />
@@ -84,6 +90,7 @@ export function QuestionView({
             const isAnswer = index === question.correctAnswer;
             const showCorrect = revealed && isAnswer;
             const showWrong = revealed && isSelected && !isAnswer;
+            const optionFi = question.optionsFi?.[index];
 
             return (
               <li key={option}>
@@ -120,7 +127,10 @@ export function QuestionView({
                       LETTERS[index]
                     )}
                   </span>
-                  <span className="pt-0.5 text-ink-800">{option}</span>
+                  <span className="pt-0.5">
+                    <span className="block text-ink-800">{optionFi ?? option}</span>
+                    {optionFi ? <span className="mt-0.5 block text-ink-400">{option}</span> : null}
+                  </span>
                 </button>
               </li>
             );
@@ -137,7 +147,12 @@ export function QuestionView({
             <p className="text-sm font-semibold text-ink-900">
               {isCorrectChoice ? 'Correct' : selected === null ? 'Not answered' : 'Incorrect'}
             </p>
-            <p className="mt-1.5 text-sm leading-relaxed text-ink-700">{question.explanation}</p>
+            <p className="mt-1.5 text-sm leading-relaxed text-ink-700">
+              {question.explanationFi ?? question.explanation}
+            </p>
+            {question.explanationFi ? (
+              <p className="mt-2 text-sm leading-relaxed text-ink-500">{question.explanation}</p>
+            ) : null}
             {question.reference ? (
               <p className="mt-3 flex items-center gap-1.5 text-xs font-medium text-ink-500">
                 <Scale size={13} aria-hidden />

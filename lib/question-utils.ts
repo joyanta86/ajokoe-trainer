@@ -3,6 +3,8 @@ export interface PermutableQuestion {
   id: string;
   options: string[];
   correctAnswer: number;
+  /** Optional parallel translation of `options`, permuted in lockstep. */
+  optionsFi?: string[];
 }
 
 /**
@@ -50,6 +52,10 @@ export function withDeterministicOptionOrder<T extends PermutableQuestion>(quest
   return {
     ...question,
     options: indices.map((originalIndex) => question.options[originalIndex]),
+    // Keep any parallel translation aligned with the permuted English options.
+    ...(question.optionsFi
+      ? { optionsFi: indices.map((originalIndex) => question.optionsFi![originalIndex]) }
+      : {}),
     correctAnswer: indices.indexOf(question.correctAnswer),
   };
 }

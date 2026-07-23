@@ -10,9 +10,15 @@ import type { DiagramKey } from './types';
 export interface QuizQuestion {
   id: string;
   question: string;
+  /** Optional Finnish question text; when present the UI shows it as primary. */
+  questionFi?: string;
   options: string[];
+  /** Optional Finnish options, parallel to `options`. */
+  optionsFi?: string[];
   correctAnswer: number;
   explanation: string;
+  /** Optional Finnish explanation, shown alongside the English one. */
+  explanationFi?: string;
   /** Statute or guideline the explanation rests on. */
   reference?: string;
   /** Primary badge, e.g. "Priority Rules" or "Legislation & Taxi Rules". */

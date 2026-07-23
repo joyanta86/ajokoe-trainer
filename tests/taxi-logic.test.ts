@@ -61,6 +61,22 @@ describe('taxi question bank integrity', () => {
     }
   });
 
+  it('is fully bilingual: Finnish present and parallel to the English', () => {
+    for (const question of taxiQuestions) {
+      assert.ok(question.questionFi.length > 0, `${question.id}: missing questionFi`);
+      assert.ok(question.explanationFi.length > 40, `${question.id}: explanationFi too thin`);
+      assert.equal(
+        question.optionsFi.length,
+        question.options.length,
+        `${question.id}: optionsFi length must match options`,
+      );
+      assert.ok(
+        question.optionsFi.every((option) => option.length > 0),
+        `${question.id}: empty Finnish option`,
+      );
+    }
+  });
+
   it('does not put the correct answer in a predictable position', () => {
     const positions = new Map<number, number>();
     for (const question of taxiQuestions) {

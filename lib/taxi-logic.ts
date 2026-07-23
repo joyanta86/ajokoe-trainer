@@ -22,9 +22,12 @@ export function toQuizQuestion(question: TaxiQuestion): QuizQuestion {
   return {
     id: question.id,
     question: question.question,
+    questionFi: question.questionFi,
     options: question.options,
+    optionsFi: question.optionsFi,
     correctAnswer: question.correctAnswer,
     explanation: question.explanation,
+    explanationFi: question.explanationFi,
     reference: question.reference,
     categoryLabel: question.category,
     categoryNative: TAXI_CATEGORY_FI[question.category],

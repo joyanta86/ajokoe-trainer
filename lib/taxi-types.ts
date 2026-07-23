@@ -11,11 +11,20 @@ export type TaxiCategory =
 export interface TaxiQuestion {
   id: string;
   category: TaxiCategory;
+  /** English question text. */
   question: string;
+  /** Finnish question text — the language of the real Traficom exam. */
+  questionFi: string;
+  /** English options. */
   options: string[];
-  /** 0-based index into `options`. */
+  /** Finnish options, parallel to `options` (same order, permuted in lockstep). */
+  optionsFi: string[];
+  /** 0-based index into `options` / `optionsFi`. */
   correctAnswer: number;
+  /** English explanation. */
   explanation: string;
+  /** Finnish explanation. */
+  explanationFi: string;
   /** Statute or Traficom guideline the explanation rests on. */
   reference?: string;
 }
