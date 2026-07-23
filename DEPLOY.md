@@ -1,75 +1,62 @@
-# Deploying to Cloudflare Pages
+# Deploying to Cloudflare
 
 The app is a **fully static export** (`output: 'export'` in `next.config.mjs`). `npm run build`
-produces a self-contained `out/` directory of HTML/JS/CSS with no server, so Cloudflare Pages
-serves it directly — no adapter, no Workers, no runtime cost.
+produces a self-contained `out/` directory of HTML/JS/CSS with no server, so it is served as
+**static assets on a Cloudflare Worker** — no server code, no adapter, no runtime cost.
 
 Target domain: **`taxiexam.joyanta.fi`**
 
-There are two ways to deploy. **Option A (GitHub integration) is recommended** — it redeploys
-automatically on every push and needs no local tooling.
+The repo is connected to a Cloudflare **Workers** service named **`ajokoe-trainer`** with:
+
+- **Build command:** `npm run build`
+- **Deploy command:** `npx wrangler deploy`
+- **Root directory:** `/`
+
+`npx wrangler deploy` reads [`wrangler.toml`](wrangler.toml), which points at the static
+`out/` directory via `[assets]`. Every push to `main` triggers a fresh build + deploy.
+
+> **Note on the earlier error.** The first attempt failed with *"Missing entry-point to Worker
+> script or to assets directory"* because `wrangler.toml` still held a Pages-style
+> `pages_build_output_dir`, which `wrangler deploy` (the Workers command) does not read. It now
+> uses `[assets] directory = "./out"`, which is what `wrangler deploy` expects. Re-run the build
+> (or just push) and it deploys.
 
 ---
 
-## Option A — Connect the GitHub repo (recommended)
+## Point `taxiexam.joyanta.fi` at it
 
-1. Go to the [Cloudflare dashboard](https://dash.cloudflare.com) → **Workers & Pages** →
-   **Create** → **Pages** → **Connect to Git**.
-2. Select the repository **`joyanta86/ajokoe-trainer`** and the `main` branch.
-3. Set the build configuration:
-   - **Framework preset:** `Next.js (Static HTML Export)` — or "None", the values below are what matter
-   - **Build command:** `npm run build`
-   - **Build output directory:** `out`
-   - **Node version:** 20 (set env var `NODE_VERSION=20` if the default is older)
-4. **Save and Deploy.** The first build gives you a `*.pages.dev` URL to verify.
+In the Cloudflare dashboard → **Workers & Pages** → **`ajokoe-trainer`** → **Settings** →
+**Domains & Routes** → **Add** → **Custom Domain**:
 
-### Point `taxiexam.joyanta.fi` at it
-
-1. In the new Pages project → **Custom domains** → **Set up a custom domain**.
-2. Enter `taxiexam.joyanta.fi`.
-3. If `joyanta.fi` is already a zone on this same Cloudflare account, the required **CNAME**
-   record (`taxiexam` → `<project>.pages.dev`, proxied) is created automatically. Otherwise add
-   that CNAME wherever `joyanta.fi`'s DNS is managed.
-4. TLS is issued automatically; the domain is live within a few minutes.
-
-Every later `git push` to `main` triggers a fresh deploy.
+1. Enter `taxiexam.joyanta.fi`.
+2. If `joyanta.fi` is a zone on this same Cloudflare account, the required DNS record is created
+   automatically. Otherwise add the CNAME shown wherever `joyanta.fi`'s DNS is managed.
+3. TLS is issued automatically; the domain is live within a few minutes.
 
 ---
 
-## Option B — Deploy from your machine with Wrangler
-
-Use this for a one-off manual deploy.
+## Deploy manually from your machine (optional)
 
 ```bash
-# One-time: authenticate (opens a browser)
-npx wrangler login
-
-# Build and deploy the static output
-npm run build
-npx wrangler pages deploy out --project-name=taxiexam --branch=main
-```
-
-Then attach the domain once:
-
-```bash
-npx wrangler pages domain add taxiexam.joyanta.fi --project-name=taxiexam
-```
-
-(or add it via the dashboard as in Option A). Convenience scripts are wired in `package.json`:
-
-```bash
-npm run deploy   # build + wrangler pages deploy out
+npx wrangler login          # one-time, opens a browser
+npm run deploy              # = npm run build && wrangler deploy
 ```
 
 ---
 
 ## Notes
 
-- **`public/_headers`** sets security headers (`X-Content-Type-Options`, `X-Frame-Options`,
-  `Referrer-Policy`, `Permissions-Policy`) and long-lived caching for hashed `/_next/static`
-  assets. Cloudflare Pages applies it automatically.
+- **`public/_headers`** (security headers + immutable caching for hashed `/_next/static` assets)
+  and **`public/_redirects`** are copied into `out/` by the build and honoured by Cloudflare
+  static assets.
+- **`not_found_handling = "404-page"`** serves the styled `out/404.html` for unknown paths.
 - **No environment variables** are required — all state is client-side in `localStorage`.
-- **`wrangler.toml`** pins the Pages project name and output directory for the CLI.
 - The domain name suggests the taxi track, but the deployed site is the full two-track app; it
   opens on the landing page where the visitor picks a track. To land visitors straight on the
-  taxi exam instead, change the redirect target — ask and it can be wired up.
+  taxi exam instead, ask and the root can be redirected to `/taxi`.
+
+### Alternative: classic Cloudflare Pages
+
+If you would rather use Pages than a Workers service, change the project's **Deploy command** to
+`npx wrangler pages deploy out` (and, for a fresh Pages project, set the output directory to
+`out`). The static `out/` output works unchanged either way.

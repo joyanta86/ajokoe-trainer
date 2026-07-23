@@ -1,5 +1,14 @@
-# Cloudflare Pages project configuration for the Wrangler CLI.
-# `npm run build` exports the static site to `out/`, which Pages serves directly.
-name = "taxiexam"
-pages_build_output_dir = "out"
+# Cloudflare Workers static-assets configuration.
+#
+# The app is a fully static Next.js export: `npm run build` writes the site to
+# `out/`, and this deploys it as static assets on a Worker (no server code).
+# The Cloudflare build runs `npx wrangler deploy`, which reads this file.
+#
+# `name` must match the Workers service connected to the GitHub repo.
+name = "ajokoe-trainer"
 compatibility_date = "2024-11-01"
+
+[assets]
+directory = "./out"
+# Serve the styled 404 page (out/404.html) for unknown paths.
+not_found_handling = "404-page"
