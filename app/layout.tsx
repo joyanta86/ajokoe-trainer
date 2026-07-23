@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
 import { SiteHeader } from '@/components/SiteHeader';
+import { AuthGate } from '@/components/auth/AuthGate';
+import { AuthProvider } from '@/components/auth/AuthProvider';
 
 import './globals.css';
 
@@ -39,8 +41,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main">{children}</main>
+        <AuthProvider>
+          <SiteHeader />
+          <main id="main">
+            <AuthGate>{children}</AuthGate>
+          </main>
+        </AuthProvider>
         <footer className="mt-16 border-t border-ink-200 bg-white">
           <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-ink-500 sm:px-6">
             <p className="font-medium text-ink-700">Ajokoe Trainer</p>

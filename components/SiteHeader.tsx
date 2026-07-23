@@ -1,9 +1,10 @@
 'use client';
 
-import { BookOpen, Bookmark, Car, ClipboardCheck, LayoutDashboard } from 'lucide-react';
+import { BookOpen, Bookmark, Car, ClipboardCheck, LayoutDashboard, LogOut } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
+import { useAuth } from '@/components/auth/AuthProvider';
 import { TRACKS, trackForPathname } from '@/lib/tracks';
 import { cn } from '@/lib/utils';
 
@@ -15,11 +16,14 @@ const NAV_ICON = {
 } as const;
 
 export function SiteHeader() {
-  const pathname = usePathname();
+  const rawPath = usePathname();
+  // `trailingSlash` export can yield "/login/"; normalise so matches are exact.
+  const pathname = rawPath.length > 1 ? rawPath.replace(/\/+$/, '') : rawPath;
   const track = trackForPathname(pathname);
+  const { user, signOut } = useAuth();
 
-  // Exam simulators are deliberately distraction-free.
-  if (pathname.endsWith('/exam/run')) return null;
+  // Exam simulators are deliberately distraction-free; the login page is bare.
+  if (pathname.endsWith('/exam/run') || pathname === '/login') return null;
 
   return (
     <header className="sticky top-0 z-40 border-b border-ink-200 bg-white/95 backdrop-blur">
@@ -79,6 +83,25 @@ export function SiteHeader() {
             );
           })}
         </div>
+
+        {user ? (
+          <div className="order-4 flex items-center gap-2">
+            <span
+              className="hidden max-w-[12rem] truncate text-sm text-ink-500 md:inline"
+              title={user.email ?? undefined}
+            >
+              {user.email}
+            </span>
+            <button
+              type="button"
+              onClick={() => signOut()}
+              className="flex items-center gap-1.5 rounded-lg border border-ink-200 px-2.5 py-1.5 text-xs font-medium text-ink-600 hover:bg-ink-100"
+            >
+              <LogOut size={14} aria-hidden />
+              <span className="hidden sm:inline">Sign out</span>
+            </button>
+          </div>
+        ) : null}
       </div>
     </header>
   );

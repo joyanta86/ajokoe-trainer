@@ -50,7 +50,10 @@ npm run deploy              # = npm run build && wrangler deploy
   and **`public/_redirects`** are copied into `out/` by the build and honoured by Cloudflare
   static assets.
 - **`not_found_handling = "404-page"`** serves the styled `out/404.html` for unknown paths.
-- **No environment variables** are required — all state is client-side in `localStorage`.
+- **Environment variables:** sign-in and cloud sync need `NEXT_PUBLIC_SUPABASE_URL` and
+  `NEXT_PUBLIC_SUPABASE_ANON_KEY` set as **build variables** on the Cloudflare project (they are
+  inlined at build time). See [AUTH.md](AUTH.md). Without them the site still builds and serves,
+  but shows a "sign-in not configured" screen since login is required.
 - The domain name suggests the taxi track, but the deployed site is the full two-track app; it
   opens on the landing page where the visitor picks a track. To land visitors straight on the
   taxi exam instead, ask and the root can be redirected to `/taxi`.

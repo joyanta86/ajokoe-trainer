@@ -7,8 +7,11 @@
 Study by topic with instant, law-referenced explanations, sit a realistic timed mock exam,
 and get an automated weak-spot analysis with a one-click targeted re-study quiz.
 
-Everything runs client-side. There is no backend, no account and no tracking — your
-progress lives in your browser's `localStorage`, kept separately for each track.
+Sign-in (email/password + Google) is handled by **Supabase Auth**, and each user's
+progress syncs across their devices. The app itself stays a static export — auth and
+sync run client-side against Supabase's hosted API, protected by Row Level Security.
+See **[AUTH.md](AUTH.md)** for the one-time Supabase + Google setup. Without those keys
+the app still builds and runs; it shows a "sign-in not configured" notice instead.
 
 ---
 
