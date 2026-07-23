@@ -1,50 +1,38 @@
 'use client';
 
-import {
-  ArrowRight,
-  BookOpen,
-  CheckCircle2,
-  Gauge,
-  Home,
-  Target,
-  Timer,
-  XCircle,
-} from 'lucide-react';
+import { ArrowRight, BookOpen, CheckCircle2, Gauge, Home, Target, Timer, XCircle } from 'lucide-react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { use } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 import { QuestionView } from '@/components/QuestionView';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { ProgressBar, toneForScore } from '@/components/ui/ProgressBar';
-import { getQuestionsByIds } from '@/data/questions';
-import { CATEGORY_FI, categorySlug } from '@/lib/exam-config';
-import {
-  breakdownFromResult,
-  computeCategoryStrength,
-  computeReadinessIndex,
-  formatDuration,
-  formatExamDate,
-  identifyWeakSpots,
-  readinessVerdict,
-  toQuizQuestion,
-} from "@/lib/exam-logic";
+import { getTaxiQuestionsByIds } from '@/data/taxi-questions';
+import { formatDuration, formatExamDate } from '@/lib/exam-logic';
 import { useHydrated } from '@/lib/hooks';
+import { TAXI_CATEGORY_FI, taxiCategorySlug } from '@/lib/taxi-config';
+import {
+  computeTaxiCategoryStrength,
+  computeTaxiReadinessIndex,
+  identifyTaxiWeakSpots,
+  taxiReadinessVerdict,
+  toQuizQuestion,
+} from '@/lib/taxi-logic';
 import { percentage } from '@/lib/utils';
-import { useExamStore } from '@/store/useExamStore';
-import { useProgressStore } from '@/store/useProgressStore';
+import { useTaxiExamStore } from '@/store/useTaxiExamStore';
+import { useTaxiProgressStore } from '@/store/useTaxiProgressStore';
 
-export default function ResultPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+function TaxiResultReport({ id }: { id: string }) {
   const router = useRouter();
   const hydrated = useHydrated();
 
-  const result = useExamStore((state) => state.history.find((entry) => entry.id === id));
-  const history = useExamStore((state) => state.history);
-  const attempts = useProgressStore((state) => state.attempts);
-  const bookmarks = useProgressStore((state) => state.bookmarks);
-  const toggleBookmark = useProgressStore((state) => state.toggleBookmark);
-  const setRestudyQueue = useProgressStore((state) => state.setRestudyQueue);
+  const result = useTaxiExamStore((state) => state.history.find((entry) => entry.id === id));
+  const history = useTaxiExamStore((state) => state.history);
+  const attempts = useTaxiProgressStore((state) => state.attempts);
+  const bookmarks = useTaxiProgressStore((state) => state.bookmarks);
+  const toggleBookmark = useTaxiProgressStore((state) => state.toggleBookmark);
+  const setRestudyQueue = useTaxiProgressStore((state) => state.setRestudyQueue);
 
   if (!hydrated) {
     return (
@@ -63,43 +51,43 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
           where the exam was taken.
         </p>
         <Link
-          href="/car"
+          href="/taxi"
           className="mt-6 inline-flex items-center gap-2 rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-800"
         >
           <Home size={16} aria-hidden />
-          Back to dashboard
+          Back to taxi dashboard
         </Link>
       </div>
     );
   }
 
-  const breakdown = breakdownFromResult(result);
-  const strengths = computeCategoryStrength(result);
-  const weakSpots = identifyWeakSpots(result);
-  const readiness = computeReadinessIndex(history, Object.keys(attempts));
-  const verdict = readinessVerdict(readiness);
+  const strengths = computeTaxiCategoryStrength(result);
+  const weakSpots = identifyTaxiWeakSpots(result);
+  const readiness = computeTaxiReadinessIndex(history, Object.keys(attempts));
+  const verdict = taxiReadinessVerdict(readiness);
 
   const totalQuestions = result.questionIds.length;
-  const totalCorrect = result.scoreTheory + result.scoreHazard + result.scoreRisk;
-  const incorrectQuestions = getQuestionsByIds(result.incorrectQuestionIds);
+  const totalCorrect = Object.values(result.categoryScores).reduce(
+    (sum, score) => sum + score.correct,
+    0,
+  );
+  const incorrectQuestions = getTaxiQuestionsByIds(result.incorrectQuestionIds);
 
   const launchRestudy = () => {
     const label =
       weakSpots.length > 0
-        ? `Weakest topics: ${weakSpots.map((spot) => spot.category).join(', ')}`
+        ? `Weakest categories: ${weakSpots.map((spot) => spot.category).join(', ')}`
         : 'Missed questions';
     setRestudyQueue(result.incorrectQuestionIds, label);
-    router.push("/car/review");
+    router.push('/taxi/review');
   };
 
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-      {/* Pass / fail banner */}
+      {/* Pass / fail banner with the category-by-category verdict */}
       <section
         className={`rounded-2xl border-2 p-6 ${
-          result.isPassed
-            ? 'border-emerald-300 bg-emerald-50'
-            : 'border-rose-300 bg-rose-50'
+          result.isPassed ? 'border-emerald-300 bg-emerald-50' : 'border-rose-300 bg-rose-50'
         }`}
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
@@ -121,8 +109,8 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
               </h1>
               <p className="mt-1 text-sm text-ink-700">
                 {result.isPassed
-                  ? 'You stayed within the allowed error limit in every section.'
-                  : 'You exceeded the allowed errors in at least one section.'}
+                  ? 'You reached at least 70% in every category.'
+                  : 'You fell below 70% in at least one category.'}
               </p>
               <p className="mt-2 text-xs text-ink-500">{formatExamDate(result.date)}</p>
             </div>
@@ -133,58 +121,88 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
               {totalCorrect}
               <span className="text-lg text-ink-400">/{totalQuestions}</span>
             </p>
-            <p className="text-sm text-ink-600">{percentage(totalCorrect, totalQuestions)}% correct</p>
+            <p className="text-sm text-ink-600">
+              {percentage(totalCorrect, totalQuestions)}% correct
+            </p>
             <p className="mt-1 flex items-center justify-end gap-1.5 text-xs text-ink-500">
               <Timer size={13} aria-hidden />
               {formatDuration(result.durationSeconds)} used
             </p>
           </div>
         </div>
+
+        <ul className="mt-5 grid gap-2 sm:grid-cols-3">
+          {strengths.map((entry) => (
+            <li
+              key={entry.category}
+              className={`rounded-xl border bg-white p-3 ${
+                entry.isPassed ? 'border-emerald-200' : 'border-rose-200'
+              }`}
+            >
+              <p className="text-xs font-medium text-ink-600">{entry.category}</p>
+              <p className="mt-1 flex items-baseline gap-2">
+                <span className="text-lg font-bold text-ink-900">
+                  {entry.correct}/{entry.total}
+                </span>
+                <span
+                  className={`rounded-full px-2 py-0.5 text-xs font-bold ${
+                    entry.isPassed
+                      ? 'bg-emerald-100 text-emerald-800'
+                      : 'bg-rose-100 text-rose-800'
+                  }`}
+                >
+                  {entry.isPassed ? 'PASSED' : 'FAILED'}
+                </span>
+              </p>
+            </li>
+          ))}
+        </ul>
       </section>
 
-      {/* Traficom criteria breakdown */}
+      {/* Criteria breakdown */}
       <Card className="mt-6">
         <CardHeader
           title="Traficom criteria breakdown"
-          subtitle="Every section must stay within its allowance"
+          subtitle="Every category must reach the 70% pass mark"
         />
         <CardBody className="overflow-x-auto">
           <table className="w-full min-w-[34rem] text-sm">
             <thead>
               <tr className="border-b border-ink-200 text-left text-xs uppercase tracking-wide text-ink-500">
-                <th scope="col" className="pb-2">Section</th>
+                <th scope="col" className="pb-2">Category</th>
                 <th scope="col" className="pb-2 text-right">Correct</th>
-                <th scope="col" className="pb-2 text-right">Errors</th>
-                <th scope="col" className="pb-2 text-right">Allowed</th>
+                <th scope="col" className="pb-2 text-right">Score</th>
+                <th scope="col" className="pb-2 text-right">Pass mark</th>
                 <th scope="col" className="pb-2 text-right">Result</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-ink-100">
-              {breakdown.map((section) => (
-                <tr key={section.type}>
-                  <td className="py-3 font-medium text-ink-900">{section.label}</td>
+              {strengths.map((entry) => (
+                <tr key={entry.category}>
+                  <td className="py-3">
+                    <p className="font-medium text-ink-900">{entry.category}</p>
+                    <p className="text-xs text-ink-500">{TAXI_CATEGORY_FI[entry.category]}</p>
+                  </td>
                   <td className="py-3 text-right tabular-nums text-ink-700">
-                    {section.correct}/{section.total}
+                    {entry.correct}/{entry.total}
                   </td>
                   <td
                     className={`py-3 text-right font-semibold tabular-nums ${
-                      section.passed ? 'text-ink-900' : 'text-rose-700'
+                      entry.isPassed ? 'text-ink-900' : 'text-rose-700'
                     }`}
                   >
-                    {section.errors}
+                    {entry.percentage}%
                   </td>
-                  <td className="py-3 text-right tabular-nums text-ink-500">
-                    {section.allowedErrors}
-                  </td>
+                  <td className="py-3 text-right tabular-nums text-ink-500">{entry.passMark}</td>
                   <td className="py-3 text-right">
                     <span
                       className={`rounded-full px-2.5 py-1 text-xs font-bold ${
-                        section.passed
+                        entry.isPassed
                           ? 'bg-emerald-100 text-emerald-800'
                           : 'bg-rose-100 text-rose-800'
                       }`}
                     >
-                      {section.passed ? 'PASS' : 'FAIL'}
+                      {entry.isPassed ? 'PASS' : 'FAIL'}
                     </span>
                   </td>
                 </tr>
@@ -195,16 +213,15 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
       </Card>
 
       <div className="mt-6 grid gap-6 md:grid-cols-2">
-        {/* Category strength meters */}
         <Card>
-          <CardHeader title="Category strength" subtitle="Score per traffic topic in this exam" />
+          <CardHeader title="Category strength" subtitle="Score per taxi topic in this exam" />
           <CardBody className="space-y-4">
             {strengths.map((entry) => (
               <div key={entry.category}>
                 <div className="flex items-baseline justify-between gap-3">
                   <div>
                     <p className="text-sm font-medium text-ink-900">{entry.category}</p>
-                    <p className="text-xs text-ink-500">{CATEGORY_FI[entry.category]}</p>
+                    <p className="text-xs text-ink-500">{TAXI_CATEGORY_FI[entry.category]}</p>
                   </div>
                   <p className="shrink-0 text-sm font-semibold text-ink-700">
                     {entry.correct}/{entry.total}
@@ -222,10 +239,9 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
           </CardBody>
         </Card>
 
-        {/* Readiness index */}
         <Card>
           <CardHeader
-            title="Official Test Readiness Index"
+            title="Taxi Driver Readiness Index"
             subtitle="Across your recent exams and bank coverage"
             icon={<Gauge size={18} aria-hidden />}
           />
@@ -265,7 +281,7 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
                   {result.incorrectQuestionIds.length} question
                   {result.incorrectQuestionIds.length === 1 ? '' : 's'}
                 </strong>
-                . These topics need the most attention:
+                . These categories need the most attention:
               </p>
 
               <ul className="mt-4 space-y-3">
@@ -286,11 +302,11 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
                       </div>
                     </div>
                     <Link
-                      href={`/car/study/${categorySlug(spot.category)}`}
+                      href={`/taxi/study/${taxiCategorySlug(spot.category)}`}
                       className="inline-flex items-center gap-1.5 rounded-lg border border-ink-200 bg-white px-3 py-2 text-xs font-semibold text-ink-700 hover:bg-ink-100"
                     >
                       <BookOpen size={14} aria-hidden />
-                      Study topic
+                      Study category
                     </Link>
                   </li>
                 ))}
@@ -310,12 +326,11 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
         </CardBody>
       </Card>
 
-      {/* Missed questions with explanations */}
       {incorrectQuestions.length > 0 ? (
         <section className="mt-6">
           <h2 className="text-lg font-semibold text-ink-900">Review your mistakes</h2>
           <p className="mt-1 text-sm text-ink-600">
-            Each answer is shown with the correct option and its basis in law.
+            Each answer is shown with the correct option and its basis in law or Traficom guidance.
           </p>
           <div className="mt-4 space-y-5">
             {incorrectQuestions.map((question) => (
@@ -336,19 +351,39 @@ export default function ResultPage({ params }: { params: Promise<{ id: string }>
 
       <div className="mt-8 flex flex-wrap gap-3">
         <Link
-          href="/car/exam"
+          href="/taxi/exam"
           className="inline-flex items-center gap-2 rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-800"
         >
           Take another mock exam
         </Link>
         <Link
-          href="/car"
+          href="/taxi"
           className="inline-flex items-center gap-2 rounded-lg border border-ink-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-ink-50"
         >
           <Home size={16} aria-hidden />
-          Dashboard
+          Taxi dashboard
         </Link>
       </div>
     </div>
+  );
+}
+
+/** Reads the result id from `?id=` so the route can be statically exported. */
+function TaxiResultFromQuery() {
+  const id = useSearchParams().get('id') ?? '';
+  return <TaxiResultReport id={id} />;
+}
+
+export default function TaxiResultPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="mx-auto max-w-4xl px-4 py-20 text-center sm:px-6">
+          <p className="text-sm text-ink-500">Loading result…</p>
+        </div>
+      }
+    >
+      <TaxiResultFromQuery />
+    </Suspense>
   );
 }

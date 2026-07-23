@@ -231,7 +231,7 @@ export default function TaxiDashboardPage() {
                 {recentExams.map((result) => (
                   <li key={result.id}>
                     <Link
-                      href={`/taxi/results/${result.id}`}
+                      href={`/taxi/results?id=${result.id}`}
                       className="flex items-center justify-between gap-4 py-3 transition-colors hover:bg-ink-50"
                     >
                       <div>

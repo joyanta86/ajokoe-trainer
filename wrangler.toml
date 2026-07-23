@@ -1,0 +1,5 @@
+# Cloudflare Pages project configuration for the Wrangler CLI.
+# `npm run build` exports the static site to `out/`, which Pages serves directly.
+name = "taxiexam"
+pages_build_output_dir = "out"
+compatibility_date = "2024-11-01"

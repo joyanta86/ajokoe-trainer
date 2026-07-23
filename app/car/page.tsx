@@ -228,7 +228,7 @@ export default function DashboardPage() {
                 {recentExams.map((result) => (
                   <li key={result.id}>
                     <Link
-                      href={`/car/results/${result.id}`}
+                      href={`/car/results?id=${result.id}`}
                       className="flex items-center justify-between gap-4 py-3 transition-colors hover:bg-ink-50"
                     >
                       <div>

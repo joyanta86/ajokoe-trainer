@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "deploy": "npm run build && wrangler pages deploy out --project-name=taxiexam"
   },
   "dependencies": {
     "lucide-react": "^0.469.0",

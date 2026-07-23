@@ -54,7 +54,7 @@ export default function TaxiExamRunPage() {
 
     const resultId = submitExam();
     if (resultId) {
-      router.replace(`/taxi/results/${resultId}`);
+      router.replace(`/taxi/results?id=${resultId}`);
     } else {
       submittingRef.current = false;
     }

@@ -52,7 +52,7 @@ export default function ExamRunPage() {
 
     const resultId = submitExam();
     if (resultId) {
-      router.replace(`/car/results/${resultId}`);
+      router.replace(`/car/results?id=${resultId}`);
     } else {
       submittingRef.current = false;
     }

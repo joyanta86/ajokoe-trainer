@@ -1,0 +1,2 @@
+# Cloudflare Pages serves the exported static files directly.
+# Deep links resolve to path/index.html thanks to trailingSlash export.
