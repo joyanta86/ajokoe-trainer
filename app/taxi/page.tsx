@@ -12,8 +12,11 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
+import { AnimatedNumber } from '@/components/ui/AnimatedNumber';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
+import { GaugeChart } from '@/components/ui/Gauge';
 import { ProgressBar, toneForScore } from '@/components/ui/ProgressBar';
+import { RoadDivider } from '@/components/ui/RoadDivider';
 import { taxiQuestions } from '@/data/taxi-questions';
 import { formatExamDate } from '@/lib/exam-logic';
 import { useHydrated } from '@/lib/hooks';
@@ -69,10 +72,22 @@ export default function TaxiDashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <section className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-sm sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-wide text-brand-400">
-          Taksinkuljettajan ajolupakoe
-        </p>
+      <section className="overflow-hidden rounded-2xl border border-ink-200 bg-surface shadow-sm">
+        {/* Taxi checker livery — the track's own visual identity, distinct from the car track's plain blue. */}
+        <div
+          className="h-2 w-full"
+          style={{
+            backgroundImage:
+              'repeating-linear-gradient(90deg, #fbbf24 0 10px, transparent 10px 20px)',
+            backgroundColor: 'var(--color-ink-50)',
+          }}
+          aria-hidden
+        />
+        <div className="p-6 sm:p-8">
+          <p className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-amber-400">
+            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_2px] shadow-amber-400/60" />
+            Taksinkuljettajan ajolupakoe
+          </p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
           Qualify as a Finnish taxi driver
         </h1>
@@ -97,7 +112,9 @@ export default function TaxiDashboardPage() {
             <BookOpen size={18} aria-hidden />
             Study by category
           </Link>
+          </div>
         </div>
+        <RoadDivider className="text-brand-400/40" />
       </section>
 
       {hydrated && restudyQueue.length > 0 ? (
@@ -133,37 +150,42 @@ export default function TaxiDashboardPage() {
             subtitle="Accuracy, pass rate and bank coverage"
             icon={<Gauge size={18} aria-hidden />}
           />
-          <CardBody>
-            <p className="text-5xl font-bold tracking-tight text-ink-900">
-              {readiness}
-              <span className="text-2xl font-semibold text-ink-400">%</span>
-            </p>
-            <ProgressBar className="mt-3" value={readiness} tone={toneForScore(readiness)} />
+          <CardBody className="flex flex-col items-center">
+            <GaugeChart
+              value={readiness}
+              tooltip="Weighted from recent accuracy (60%), pass rate (25%) and question-bank coverage (15%)"
+            />
             <p
-              className={`mt-4 rounded-lg border px-3 py-2 text-sm font-medium ${VERDICT_TONE[verdict.tone]}`}
+              className={`mt-4 w-full rounded-lg border px-3 py-2 text-center text-sm font-medium ${VERDICT_TONE[verdict.tone]}`}
             >
               {verdict.label}
             </p>
-            <dl className="mt-4 space-y-2 text-sm">
+            <dl className="mt-4 w-full space-y-2 text-sm">
               <div className="flex justify-between">
                 <dt className="text-ink-500">Mock exams taken</dt>
-                <dd className="font-semibold text-ink-900">{hydrated ? history.length : 0}</dd>
+                <dd className="font-semibold text-ink-900">
+                  <AnimatedNumber value={hydrated ? history.length : 0} />
+                </dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-ink-500">Exams passed</dt>
                 <dd className="font-semibold text-ink-900">
-                  {hydrated ? history.filter((r) => r.isPassed).length : 0}
+                  <AnimatedNumber
+                    value={hydrated ? history.filter((r) => r.isPassed).length : 0}
+                  />
                 </dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-ink-500">Bank coverage</dt>
                 <dd className="font-semibold text-ink-900">
-                  {percentage(attemptedIds.length, taxiQuestions.length)}%
+                  <AnimatedNumber value={percentage(attemptedIds.length, taxiQuestions.length)} />%
                 </dd>
               </div>
               <div className="flex justify-between">
                 <dt className="text-ink-500">Flagged questions</dt>
-                <dd className="font-semibold text-ink-900">{hydrated ? bookmarks.length : 0}</dd>
+                <dd className="font-semibold text-ink-900">
+                  <AnimatedNumber value={hydrated ? bookmarks.length : 0} />
+                </dd>
               </div>
             </dl>
           </CardBody>

@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowLeft, ArrowRight, RotateCcw, Trophy } from 'lucide-react';
+import { AnimatePresence, motion } from 'motion/react';
 import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
 
@@ -34,6 +35,7 @@ export function PracticeRunner({
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [sessionKey, setSessionKey] = useState(0);
+  const [direction, setDirection] = useState(1);
 
   const question = questions[index];
   const answered = Object.keys(answers).length;
@@ -56,6 +58,14 @@ export function PracticeRunner({
     setIndex(0);
     setSessionKey((key) => key + 1);
   };
+
+  const goTo = useCallback(
+    (nextIndex: number) => {
+      setDirection(nextIndex > index ? 1 : -1);
+      setIndex(Math.max(0, Math.min(questions.length - 1, nextIndex)));
+    },
+    [index, questions.length],
+  );
 
   if (questions.length === 0) {
     return (
@@ -139,31 +149,55 @@ export function PracticeRunner({
         </div>
       ) : null}
 
-      <div className="mt-6" key={`${sessionKey}-${question.id}`}>
-        <QuestionView
-          question={question}
-          selected={answers[question.id] ?? null}
-          onSelect={handleSelect}
-          revealed={answers[question.id] !== undefined}
-          bookmarked={bookmarks.includes(question.id)}
-          onToggleBookmark={() => onToggleBookmark(question.id)}
-          positionLabel={`Question ${index + 1} of ${questions.length}`}
-        />
+      <div className="relative mt-6 overflow-hidden">
+        <AnimatePresence initial={false} custom={direction} mode="popLayout">
+          <motion.div
+            key={`${sessionKey}-${question.id}`}
+            custom={direction}
+            initial={{ x: direction * 60, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: direction * -60, opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.15}
+            dragMomentum={false}
+            onDragEnd={(_event, info) => {
+              const threshold = 80;
+              if (info.offset.x < -threshold && index < questions.length - 1) {
+                goTo(index + 1);
+              } else if (info.offset.x > threshold && index > 0) {
+                goTo(index - 1);
+              }
+            }}
+          >
+            <QuestionView
+              question={question}
+              selected={answers[question.id] ?? null}
+              onSelect={handleSelect}
+              revealed={answers[question.id] !== undefined}
+              bookmarked={bookmarks.includes(question.id)}
+              onToggleBookmark={() => onToggleBookmark(question.id)}
+              positionLabel={`Question ${index + 1} of ${questions.length}`}
+            />
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       <div className="mt-5 flex items-center justify-between gap-3">
         <button
           type="button"
-          onClick={() => setIndex((value) => Math.max(0, value - 1))}
+          onClick={() => goTo(index - 1)}
           disabled={index === 0}
           className="inline-flex items-center gap-2 rounded-lg border border-ink-200 px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-white/5 disabled:opacity-40"
         >
           <ArrowLeft size={16} aria-hidden />
           Previous
         </button>
+        <p className="hidden text-xs text-ink-400 sm:block">Swipe or drag to move between questions</p>
         <button
           type="button"
-          onClick={() => setIndex((value) => Math.min(questions.length - 1, value + 1))}
+          onClick={() => goTo(index + 1)}
           disabled={index === questions.length - 1}
           className="inline-flex items-center gap-2 rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-brand-800 disabled:opacity-40"
         >

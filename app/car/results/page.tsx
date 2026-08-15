@@ -16,6 +16,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 
 import { QuestionView } from '@/components/QuestionView';
+import { AnimatedNumber } from '@/components/ui/AnimatedNumber';
 import { Card, CardBody, CardHeader } from '@/components/ui/Card';
 import { ProgressBar, toneForScore } from '@/components/ui/ProgressBar';
 import { getQuestionsByIds } from '@/data/questions';
@@ -138,7 +139,7 @@ function ResultReport({ id }: { id: string }) {
 
           <div className="text-right">
             <p className="text-3xl font-bold text-ink-900">
-              {totalCorrect}
+              <AnimatedNumber value={totalCorrect} />
               <span className="text-lg text-ink-400">/{totalQuestions}</span>
             </p>
             <p className="text-sm text-ink-600">{percentage(totalCorrect, totalQuestions)}% correct</p>

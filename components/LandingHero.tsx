@@ -2,6 +2,8 @@
 
 import { motion } from 'motion/react';
 
+import { RoadDivider } from '@/components/ui/RoadDivider';
+
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 export function LandingHero() {
@@ -15,22 +17,20 @@ export function LandingHero() {
           className="animate-float absolute left-[4%] top-48 h-48 w-48 rounded-full bg-brand-400/20 blur-[80px]"
           style={{ animationDelay: '1.5s' }}
         />
+        {/* Aurora ribbon — a slow-drifting Nordic-sky sweep behind the headline. */}
+        <motion.div
+          className="absolute inset-x-0 top-1/3 h-40 opacity-30 blur-[70px]"
+          style={{
+            background:
+              'linear-gradient(90deg, transparent, var(--color-brand-400) 20%, var(--color-spark-400) 50%, var(--color-brand-300) 80%, transparent)',
+          }}
+          animate={{ x: ['-10%', '10%', '-10%'] }}
+          transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
+        />
         {/* A glowing dashed road line, tying the motif to driving. */}
-        <svg
-          className="absolute inset-x-0 bottom-0 h-24 w-full text-brand-400/60"
-          preserveAspectRatio="none"
-          viewBox="0 0 400 40"
-        >
-          <line
-            x1="0"
-            y1="20"
-            x2="400"
-            y2="20"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeDasharray="16 14"
-          />
-        </svg>
+        <div className="absolute inset-x-0 bottom-0">
+          <RoadDivider className="text-brand-400/60" />
+        </div>
       </div>
 
       <div className="mx-auto max-w-5xl px-4 py-14 text-center sm:px-6 sm:py-24">
