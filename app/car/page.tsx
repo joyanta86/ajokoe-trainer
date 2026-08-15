@@ -190,8 +190,8 @@ export default function DashboardPage() {
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <div>
-                    <p className="font-medium text-ink-900">{topic.category}</p>
-                    <p className="text-xs text-ink-500">{CATEGORY_FI[topic.category]}</p>
+                    <p className="font-medium text-ink-900">{CATEGORY_FI[topic.category]}</p>
+                    <p className="text-xs text-ink-500">{topic.category}</p>
                   </div>
                   <p className="shrink-0 text-sm font-semibold text-ink-700">
                     {topic.mastered}/{topic.total}

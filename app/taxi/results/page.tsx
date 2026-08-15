@@ -189,8 +189,8 @@ function TaxiResultReport({ id }: { id: string }) {
               {strengths.map((entry) => (
                 <tr key={entry.category}>
                   <td className="py-3">
-                    <p className="font-medium text-ink-900">{entry.category}</p>
-                    <p className="text-xs text-ink-500">{TAXI_CATEGORY_FI[entry.category]}</p>
+                    <p className="font-medium text-ink-900">{TAXI_CATEGORY_FI[entry.category]}</p>
+                    <p className="text-xs text-ink-500">{entry.category}</p>
                   </td>
                   <td className="py-3 text-right tabular-nums text-ink-700">
                     {entry.correct}/{entry.total}
@@ -229,8 +229,8 @@ function TaxiResultReport({ id }: { id: string }) {
               <div key={entry.category}>
                 <div className="flex items-baseline justify-between gap-3">
                   <div>
-                    <p className="text-sm font-medium text-ink-900">{entry.category}</p>
-                    <p className="text-xs text-ink-500">{TAXI_CATEGORY_FI[entry.category]}</p>
+                    <p className="text-sm font-medium text-ink-900">{TAXI_CATEGORY_FI[entry.category]}</p>
+                    <p className="text-xs text-ink-500">{entry.category}</p>
                   </div>
                   <p className="shrink-0 text-sm font-semibold text-ink-700">
                     {entry.correct}/{entry.total}

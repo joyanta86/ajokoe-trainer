@@ -193,8 +193,8 @@ export default function TaxiDashboardPage() {
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <div>
-                    <p className="font-medium text-ink-900">{topic.category}</p>
-                    <p className="text-xs text-ink-500">{TAXI_CATEGORY_FI[topic.category]}</p>
+                    <p className="font-medium text-ink-900">{TAXI_CATEGORY_FI[topic.category]}</p>
+                    <p className="text-xs text-ink-500">{topic.category}</p>
                   </div>
                   <p className="shrink-0 text-sm font-semibold text-ink-700">
                     {topic.mastered}/{topic.total}
@@ -269,8 +269,8 @@ export default function TaxiDashboardPage() {
           <CardBody className="space-y-3">
             {TAXI_CATEGORIES.map((category) => (
               <div key={category} className="rounded-xl border border-ink-100 bg-ink-50 p-3">
-                <p className="text-sm font-semibold text-ink-900">{category}</p>
-                <p className="mt-0.5 text-xs text-ink-600">{TAXI_CATEGORY_FI[category]}</p>
+                <p className="text-sm font-semibold text-ink-900">{TAXI_CATEGORY_FI[category]}</p>
+                <p className="mt-0.5 text-xs text-ink-600">{category}</p>
                 <p className="mt-2 text-sm text-ink-700">
                   <span className="font-semibold">{TAXI_QUESTIONS_PER_CATEGORY}</span> questions ·{' '}
                   <span className="font-semibold">

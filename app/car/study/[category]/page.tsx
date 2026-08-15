@@ -32,8 +32,8 @@ export default async function StudyCategoryPage({ params }: PageProps) {
   return (
     <CarPracticeRunner
       questions={getQuestionsByCategory(category)}
-      title={category}
-      subtitle={`${CATEGORY_FI[category]} — ${CATEGORY_BLURB[category]}`}
+      title={CATEGORY_FI[category]}
+      subtitle={`${category} — ${CATEGORY_BLURB[category]}`}
       backHref="/car/study"
       backLabel="Back to study hub"
     />

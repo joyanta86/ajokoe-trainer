@@ -51,8 +51,8 @@ export default function StudyHubPage() {
               >
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <h2 className="font-semibold text-ink-900">{category}</h2>
-                    <p className="text-xs text-ink-500">{CATEGORY_FI[category]}</p>
+                    <h2 className="font-semibold text-ink-900">{CATEGORY_FI[category]}</h2>
+                    <p className="text-xs text-ink-500">{category}</p>
                   </div>
                   <ArrowRight
                     size={18}

@@ -104,8 +104,8 @@ export default function TaxiExamBriefingPage() {
               {TAXI_CATEGORIES.map((category) => (
                 <tr key={category}>
                   <td className="py-3">
-                    <p className="font-medium text-ink-900">{category}</p>
-                    <p className="text-xs text-ink-500">{TAXI_CATEGORY_FI[category]}</p>
+                    <p className="font-medium text-ink-900">{TAXI_CATEGORY_FI[category]}</p>
+                    <p className="text-xs text-ink-500">{category}</p>
                     <p className="mt-1 text-xs text-ink-600">{TAXI_CATEGORY_BLURB[category]}</p>
                   </td>
                   <td className="py-3 text-right font-semibold text-ink-900">

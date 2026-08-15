@@ -42,10 +42,10 @@ export function QuestionView({
             <span className="text-sm font-semibold text-ink-900">{positionLabel}</span>
           ) : null}
           <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-400">
-            {question.categoryLabel}
+            {question.categoryNative ?? question.categoryLabel}
           </span>
           {question.categoryNative ? (
-            <span className="hidden text-xs text-ink-500 sm:inline">{question.categoryNative}</span>
+            <span className="hidden text-xs text-ink-500 sm:inline">{question.categoryLabel}</span>
           ) : null}
           {question.sectionLabel ? (
             <span className="rounded-full bg-ink-100 px-2.5 py-1 text-xs font-medium text-ink-600">

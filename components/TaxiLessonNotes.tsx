@@ -17,8 +17,8 @@ export function TaxiLessonNotes({ lesson }: { lesson: TaxiLesson }) {
         icon={<BookText size={18} aria-hidden />}
       />
       <CardBody className="space-y-4">
-        <p className="text-sm text-ink-600">{lesson.intro}</p>
-        <p className="text-sm text-ink-500">{lesson.introFi}</p>
+        <p className="text-sm text-ink-900">{lesson.introFi}</p>
+        <p className="text-sm text-ink-500">{lesson.intro}</p>
 
         <div className="divide-y divide-ink-100 rounded-xl border border-ink-100">
           {lesson.sections.map((section, index) => {
@@ -33,9 +33,9 @@ export function TaxiLessonNotes({ lesson }: { lesson: TaxiLesson }) {
                 >
                   <span>
                     <span className="block text-sm font-semibold text-ink-900">
-                      {section.heading}
+                      {section.headingFi}
                     </span>
-                    <span className="block text-xs text-ink-500">{section.headingFi}</span>
+                    <span className="block text-xs text-ink-500">{section.heading}</span>
                   </span>
                   <ChevronDown
                     size={18}
@@ -47,10 +47,8 @@ export function TaxiLessonNotes({ lesson }: { lesson: TaxiLesson }) {
                   <ul className="space-y-3 px-4 pb-4">
                     {section.points.map((point, pointIndex) => (
                       <li key={point} className="text-sm">
-                        <p className="text-ink-700">{point}</p>
-                        <p className="mt-0.5 text-xs text-ink-500">
-                          {section.pointsFi[pointIndex]}
-                        </p>
+                        <p className="text-ink-700">{section.pointsFi[pointIndex]}</p>
+                        <p className="mt-0.5 text-xs text-ink-500">{point}</p>
                       </li>
                     ))}
                   </ul>

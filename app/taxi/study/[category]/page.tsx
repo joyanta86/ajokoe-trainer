@@ -44,8 +44,8 @@ export default async function TaxiStudyCategoryPage({ params }: PageProps) {
       </div>
       <TaxiPracticeRunner
         questions={getTaxiQuestionsByCategory(category)}
-        title={category}
-        subtitle={`${TAXI_CATEGORY_FI[category]} — ${TAXI_CATEGORY_BLURB[category]}`}
+        title={TAXI_CATEGORY_FI[category]}
+        subtitle={`${category} — ${TAXI_CATEGORY_BLURB[category]}`}
         backHref="/taxi/study"
         backLabel="Back to taxi study hub"
       />
