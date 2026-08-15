@@ -1,6 +1,7 @@
 'use client';
 
 import { ArrowRight, BookOpen, CheckCircle2, Gauge, Home, Target, Timer, XCircle } from 'lucide-react';
+import { motion } from 'motion/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
@@ -85,24 +86,32 @@ function TaxiResultReport({ id }: { id: string }) {
   return (
     <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6">
       {/* Pass / fail banner with the category-by-category verdict */}
-      <section
+      <motion.section
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className={`rounded-2xl border-2 p-6 ${
-          result.isPassed ? 'border-emerald-300 bg-emerald-50' : 'border-rose-300 bg-rose-50'
+          result.isPassed ? 'border-emerald-500/40 bg-emerald-500/10' : 'border-rose-500/40 bg-rose-500/10'
         }`}
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="flex items-start gap-4">
-            <span className={result.isPassed ? 'text-emerald-600' : 'text-rose-600'}>
+            <motion.span
+              initial={{ scale: 0.4, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 260, damping: 18, delay: 0.1 }}
+              className={result.isPassed ? 'text-emerald-400' : 'text-rose-400'}
+            >
               {result.isPassed ? (
                 <CheckCircle2 size={44} aria-hidden />
               ) : (
                 <XCircle size={44} aria-hidden />
               )}
-            </span>
+            </motion.span>
             <div>
               <h1
                 className={`text-3xl font-bold tracking-tight ${
-                  result.isPassed ? 'text-emerald-800' : 'text-rose-800'
+                  result.isPassed ? 'text-emerald-400' : 'text-rose-400'
                 }`}
               >
                 {result.isPassed ? 'PASSED' : 'FAILED'}
@@ -135,7 +144,7 @@ function TaxiResultReport({ id }: { id: string }) {
           {strengths.map((entry) => (
             <li
               key={entry.category}
-              className={`rounded-xl border bg-white p-3 ${
+              className={`rounded-xl border bg-surface p-3 ${
                 entry.isPassed ? 'border-emerald-200' : 'border-rose-200'
               }`}
             >
@@ -157,7 +166,7 @@ function TaxiResultReport({ id }: { id: string }) {
             </li>
           ))}
         </ul>
-      </section>
+      </motion.section>
 
       {/* Criteria breakdown */}
       <Card className="mt-6">
@@ -188,7 +197,7 @@ function TaxiResultReport({ id }: { id: string }) {
                   </td>
                   <td
                     className={`py-3 text-right font-semibold tabular-nums ${
-                      entry.isPassed ? 'text-ink-900' : 'text-rose-700'
+                      entry.isPassed ? 'text-ink-900' : 'text-rose-400'
                     }`}
                   >
                     {entry.percentage}%
@@ -291,7 +300,7 @@ function TaxiResultReport({ id }: { id: string }) {
                     className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-ink-200 bg-ink-50 p-3"
                   >
                     <div className="flex items-center gap-3">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white text-sm font-bold text-brand-700">
+                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-surface text-sm font-bold text-brand-400">
                         {index + 1}
                       </span>
                       <div>
@@ -303,7 +312,7 @@ function TaxiResultReport({ id }: { id: string }) {
                     </div>
                     <Link
                       href={`/taxi/study/${taxiCategorySlug(spot.category)}`}
-                      className="inline-flex items-center gap-1.5 rounded-lg border border-ink-200 bg-white px-3 py-2 text-xs font-semibold text-ink-700 hover:bg-ink-100"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-ink-200 bg-surface px-3 py-2 text-xs font-semibold text-ink-700 hover:bg-white/5"
                     >
                       <BookOpen size={14} aria-hidden />
                       Study category
@@ -358,7 +367,7 @@ function TaxiResultReport({ id }: { id: string }) {
         </Link>
         <Link
           href="/taxi"
-          className="inline-flex items-center gap-2 rounded-lg border border-ink-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-ink-50"
+          className="inline-flex items-center gap-2 rounded-lg border border-ink-200 bg-surface px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-white/5"
         >
           <Home size={16} aria-hidden />
           Taxi dashboard

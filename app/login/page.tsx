@@ -82,7 +82,7 @@ export default function LoginPage() {
         <span className="text-lg font-semibold text-ink-900">Ajokoe Trainer</span>
       </div>
 
-      <div className="rounded-2xl border border-ink-200 bg-white p-6 shadow-sm sm:p-8">
+      <div className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-sm sm:p-8">
         <h1 className="text-xl font-bold text-ink-900">
           {mode === 'signin' ? 'Sign in' : 'Create your account'}
         </h1>
@@ -96,7 +96,7 @@ export default function LoginPage() {
           type="button"
           onClick={google}
           disabled={busy || !configured}
-          className="mt-6 flex w-full items-center justify-center gap-2.5 rounded-lg border border-ink-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink-800 hover:bg-ink-50 disabled:opacity-50"
+          className="mt-6 flex w-full items-center justify-center gap-2.5 rounded-lg border border-ink-200 bg-surface px-4 py-2.5 text-sm font-semibold text-ink-800 hover:bg-white/5 disabled:opacity-50"
         >
           <GoogleIcon />
           Continue with Google
@@ -173,7 +173,7 @@ export default function LoginPage() {
               setError(null);
               setNotice(null);
             }}
-            className={cn('font-semibold text-brand-700 hover:underline')}
+            className={cn('font-semibold text-brand-400 hover:underline')}
           >
             {mode === 'signin' ? 'Sign up' : 'Sign in'}
           </button>

@@ -98,10 +98,10 @@ export default function TaxiExamRunPage() {
 
   return (
     <div className="min-h-screen bg-ink-100">
-      <header className="sticky top-0 z-30 border-b border-ink-200 bg-white">
+      <header className="sticky top-0 z-30 border-b border-ink-200 bg-surface">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-brand-700">
+            <p className="text-xs font-semibold uppercase tracking-wide text-brand-400">
               Taxi qualification mock exam
             </p>
             <p className="text-sm font-medium text-ink-700">
@@ -114,7 +114,7 @@ export default function TaxiExamRunPage() {
             <button
               type="button"
               onClick={() => setShowMatrix(true)}
-              className="flex items-center gap-1.5 rounded-lg border border-ink-200 px-3 py-2.5 text-sm font-semibold text-ink-700 hover:bg-ink-50 lg:hidden"
+              className="flex items-center gap-1.5 rounded-lg border border-ink-200 px-3 py-2.5 text-sm font-semibold text-ink-700 hover:bg-white/5 lg:hidden"
             >
               <LayoutGrid size={16} aria-hidden />
               <span className="sr-only sm:not-sr-only">Questions</span>
@@ -151,7 +151,7 @@ export default function TaxiExamRunPage() {
               type="button"
               onClick={() => goToQuestion(active.currentIndex - 1)}
               disabled={active.currentIndex === 0}
-              className="inline-flex items-center gap-2 rounded-lg border border-ink-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-ink-50 disabled:opacity-40"
+              className="inline-flex items-center gap-2 rounded-lg border border-ink-200 bg-surface px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-white/5 disabled:opacity-40"
             >
               <ArrowLeft size={16} aria-hidden />
               Previous
@@ -165,7 +165,7 @@ export default function TaxiExamRunPage() {
                 'inline-flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-semibold transition-colors',
                 isFlagged
                   ? 'border-amber-300 bg-amber-50 text-amber-700'
-                  : 'border-ink-200 bg-white text-ink-700 hover:bg-ink-50',
+                  : 'border-ink-200 bg-surface text-ink-700 hover:bg-white/5',
               )}
             >
               <Flag size={16} aria-hidden />
@@ -194,7 +194,7 @@ export default function TaxiExamRunPage() {
           </div>
         </div>
 
-        <aside className="hidden rounded-2xl border border-ink-200 bg-white p-4 lg:block lg:h-fit lg:sticky lg:top-24">
+        <aside className="hidden rounded-2xl border border-ink-200 bg-surface p-4 lg:block lg:h-fit lg:sticky lg:top-24">
           <NavigationMatrix
             questions={examQuestions}
             answers={active.answers}
@@ -206,14 +206,14 @@ export default function TaxiExamRunPage() {
       </div>
 
       {showMatrix ? (
-        <div className="fixed inset-0 z-50 flex items-end bg-ink-900/50 lg:hidden">
-          <div className="max-h-[80vh] w-full overflow-y-auto rounded-t-2xl bg-white p-5">
+        <div className="fixed inset-0 z-50 flex items-end bg-black/60 lg:hidden">
+          <div className="max-h-[80vh] w-full overflow-y-auto rounded-t-2xl bg-surface p-5">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="font-semibold text-ink-900">Navigation matrix</h2>
               <button
                 type="button"
                 onClick={() => setShowMatrix(false)}
-                className="rounded-lg p-1.5 text-ink-500 hover:bg-ink-100"
+                className="rounded-lg p-1.5 text-ink-500 hover:bg-white/5"
                 aria-label="Close navigation"
               >
                 <X size={18} aria-hidden />
@@ -238,16 +238,16 @@ export default function TaxiExamRunPage() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="taxi-submit-title"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-ink-900/50 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
         >
-          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+          <div className="w-full max-w-md rounded-2xl bg-surface p-6 shadow-xl">
             <h2 id="taxi-submit-title" className="text-lg font-semibold text-ink-900">
               Submit your exam?
             </h2>
             <p className="mt-2 text-sm text-ink-600">
               {unansweredCount > 0 ? (
                 <>
-                  <strong className="text-rose-700">
+                  <strong className="text-rose-400">
                     {unansweredCount} question{unansweredCount === 1 ? '' : 's'} unanswered
                   </strong>{' '}
                   — blank answers count as errors, exactly as in the official exam.
@@ -264,7 +264,7 @@ export default function TaxiExamRunPage() {
               <button
                 type="button"
                 onClick={() => setShowConfirm(false)}
-                className="rounded-lg border border-ink-200 px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-ink-50"
+                className="rounded-lg border border-ink-200 px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-white/5"
               >
                 Keep working
               </button>

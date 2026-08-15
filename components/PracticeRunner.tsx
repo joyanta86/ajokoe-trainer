@@ -82,7 +82,7 @@ export function PracticeRunner({
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
       <Link
         href={backHref}
-        className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-600 hover:text-brand-700"
+        className="inline-flex items-center gap-1.5 text-sm font-medium text-ink-600 hover:text-brand-400"
       >
         <ArrowLeft size={15} aria-hidden />
         {backLabel}
@@ -94,7 +94,7 @@ export function PracticeRunner({
           {subtitle ? <p className="mt-1 text-sm text-ink-600">{subtitle}</p> : null}
         </div>
         <p className="text-sm font-medium text-ink-600">
-          <span className="text-emerald-700">{correctCount} correct</span>
+          <span className="text-emerald-400">{correctCount} correct</span>
           {' · '}
           {answered}/{questions.length} answered
         </p>
@@ -107,9 +107,9 @@ export function PracticeRunner({
       />
 
       {isFinished ? (
-        <div className="mt-6 rounded-2xl border border-ink-200 bg-white p-6 shadow-sm">
+        <div className="mt-6 rounded-2xl border border-ink-200 bg-surface p-6 shadow-sm">
           <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-400">
               <Trophy size={20} aria-hidden />
             </span>
             <div>
@@ -131,7 +131,7 @@ export function PracticeRunner({
             </button>
             <Link
               href={backHref}
-              className="inline-flex items-center gap-2 rounded-lg border border-ink-200 px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-ink-50"
+              className="inline-flex items-center gap-2 rounded-lg border border-ink-200 px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-white/5"
             >
               {backLabel}
             </Link>
@@ -156,7 +156,7 @@ export function PracticeRunner({
           type="button"
           onClick={() => setIndex((value) => Math.max(0, value - 1))}
           disabled={index === 0}
-          className="inline-flex items-center gap-2 rounded-lg border border-ink-200 px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-ink-50 disabled:opacity-40"
+          className="inline-flex items-center gap-2 rounded-lg border border-ink-200 px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-white/5 disabled:opacity-40"
         >
           <ArrowLeft size={16} aria-hidden />
           Previous

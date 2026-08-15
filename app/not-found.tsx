@@ -4,7 +4,7 @@ import Link from 'next/link';
 export default function NotFound() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-24 text-center sm:px-6">
-      <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">404</p>
+      <p className="text-sm font-semibold uppercase tracking-wide text-brand-400">404</p>
       <h1 className="mt-2 text-2xl font-bold text-ink-900">Page not found</h1>
       <p className="mt-2 text-sm text-ink-600">
         That road does not lead anywhere. Head back to the dashboard and pick a topic.

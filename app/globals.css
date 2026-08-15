@@ -1,31 +1,81 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-brand-50: #eef4ff;
-  --color-brand-100: #d9e6ff;
-  --color-brand-200: #bcd3ff;
-  --color-brand-300: #8eb6ff;
-  --color-brand-400: #598eff;
-  --color-brand-500: #3366f2;
-  --color-brand-600: #1f47d8;
-  --color-brand-700: #003580; /* Finnish flag blue */
-  --color-brand-800: #002a66;
-  --color-brand-900: #001e4a;
+  /* Electric blue accent — the app's single identity color, still tracing
+     back to Finnish flag blue but pushed to a vivid, "neon dashboard" tone
+     for a dark UI. 50-300 are deep tinted surfaces/borders, 400-800 are the
+     working accent range, 900 is reserved for glow-shadow tints only. */
+  --color-brand-50: #0c1830;
+  --color-brand-100: #12285a;
+  --color-brand-200: #1c3f8c;
+  --color-brand-300: #2f5fc2;
+  --color-brand-400: #4f8ef5;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2f6fef;
+  --color-brand-700: #2563eb;
+  --color-brand-800: #1d4fd1;
+  --color-brand-900: #93c5fd;
 
-  --color-ink-50: #f7f8fa;
-  --color-ink-100: #eceef2;
-  --color-ink-200: #d9dde5;
-  --color-ink-300: #b6bdca;
-  --color-ink-400: #8b8f9f;
-  --color-ink-500: #64708a;
-  --color-ink-600: #47536b;
-  --color-ink-700: #333d52;
-  --color-ink-800: #1f2839;
-  --color-ink-900: #111826;
+  /* Dark-mode neutral ramp: 50 = page background (near-black), 900 = primary
+     text (near-white). Every component references these semantically, so
+     the whole app is a single, locked dark theme — see globals below. */
+  --color-ink-50: #060910;
+  --color-ink-100: #141a29;
+  --color-ink-200: #202839;
+  --color-ink-300: #323c54;
+  --color-ink-400: #57607a;
+  --color-ink-500: #7c86a0;
+  --color-ink-600: #9aa3ba;
+  --color-ink-700: #c0c7d9;
+  --color-ink-800: #dfe3ed;
+  --color-ink-900: #f4f6fb;
+
+  /* Elevated card/panel surface — a shade lighter than the page background
+     so panels read as "raised" against it. */
+  --color-surface: #10141f;
+  --color-surface-2: #171d2c;
+
+  /* Secondary accent — momentum / "ready" energy, used sparingly against the
+     brand blue for glows, rings and celebratory states. */
+  --color-spark-50: #052e22;
+  --color-spark-100: #08402f;
+  --color-spark-200: #0b5a41;
+  --color-spark-300: #10b981;
+  --color-spark-400: #34d399;
+  --color-spark-500: #6ee7b7;
+  --color-spark-600: #a7f3d0;
+  --color-spark-700: #d1fae5;
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-in: fade-slide-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes fade-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 :root {
-  color-scheme: light;
+  color-scheme: dark;
 }
 
 html,
@@ -35,9 +85,32 @@ body {
 
 body {
   background-color: var(--color-ink-50);
+  background-image:
+    linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+  background-size: 56px 56px;
   color: var(--color-ink-900);
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Sticky footer: body is a full-height column so `main` grows to fill any
+   gap and the footer never leaves a band of blank background beneath it
+   on short pages. */
+.app-shell {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+}
+
+.app-shell > main {
+  flex: 1 0 auto;
+}
+
+::selection {
+  background-color: rgba(59, 130, 246, 0.4);
+  color: var(--color-ink-900);
 }
 
 /* Keyboard focus ring, consistent across all interactive elements. */

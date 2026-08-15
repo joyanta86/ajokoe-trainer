@@ -26,7 +26,7 @@ export function SiteHeader() {
   if (pathname.endsWith('/exam/run') || pathname === '/login') return null;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-ink-200 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-ink-200 bg-surface/80 backdrop-blur">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
         <Link href="/" className="flex items-center gap-2 font-semibold text-ink-900">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-brand-700 text-white">
@@ -49,7 +49,7 @@ export function SiteHeader() {
                   aria-current={isActive ? 'page' : undefined}
                   className={cn(
                     'flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                    isActive ? 'bg-brand-50 text-brand-700' : 'text-ink-600 hover:bg-ink-100',
+                    isActive ? 'bg-brand-50 text-brand-400' : 'text-ink-600 hover:bg-white/5',
                   )}
                 >
                   <Icon size={16} aria-hidden />
@@ -75,7 +75,7 @@ export function SiteHeader() {
                 aria-current={isActive ? 'true' : undefined}
                 className={cn(
                   'rounded-md px-2.5 py-1.5 text-xs font-semibold transition-colors',
-                  isActive ? 'bg-brand-700 text-white' : 'text-ink-600 hover:bg-ink-100',
+                  isActive ? 'bg-brand-700 text-white' : 'text-ink-600 hover:bg-white/5',
                 )}
               >
                 {candidate.shortName}
@@ -95,7 +95,7 @@ export function SiteHeader() {
             <button
               type="button"
               onClick={() => signOut()}
-              className="flex items-center gap-1.5 rounded-lg border border-ink-200 px-2.5 py-1.5 text-xs font-medium text-ink-600 hover:bg-ink-100"
+              className="flex items-center gap-1.5 rounded-lg border border-ink-200 px-2.5 py-1.5 text-xs font-medium text-ink-600 hover:bg-white/5"
             >
               <LogOut size={14} aria-hidden />
               <span className="hidden sm:inline">Sign out</span>

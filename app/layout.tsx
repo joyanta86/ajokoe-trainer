@@ -1,3 +1,5 @@
+import { GeistMono } from 'geist/font/mono';
+import { GeistSans } from 'geist/font/sans';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 
@@ -33,32 +35,34 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen bg-ink-50 antialiased">
+    <html lang="en" className={`${GeistSans.variable} ${GeistMono.variable}`}>
+      <body className="min-h-dvh bg-ink-50 antialiased">
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-700 focus:px-4 focus:py-2 focus:text-white"
         >
           Skip to content
         </a>
-        <AuthProvider>
-          <SiteHeader />
-          <main id="main">
-            <AuthGate>{children}</AuthGate>
-          </main>
-        </AuthProvider>
-        <footer className="mt-16 border-t border-ink-200 bg-white">
-          <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-ink-500 sm:px-6">
-            <p className="font-medium text-ink-700">Ajokoe Trainer</p>
-            <p className="mt-1 max-w-3xl">
-              An independent open-source study tool. Not affiliated with or endorsed by Traficom.
-              Question content is written for practice and is grounded in Finnish statutes
-              (Tieliikennelaki 729/2018, Laki liikenteen palveluista 320/2017) and Traficom
-              guidance; always verify against the current statute and official Traficom material
-              before your exam.
-            </p>
-          </div>
-        </footer>
+        <div className="app-shell">
+          <AuthProvider>
+            <SiteHeader />
+            <main id="main">
+              <AuthGate>{children}</AuthGate>
+            </main>
+          </AuthProvider>
+          <footer className="border-t border-ink-200 bg-surface">
+            <div className="mx-auto max-w-6xl px-4 py-8 text-sm text-ink-500 sm:px-6">
+              <p className="font-medium text-ink-700">Ajokoe Trainer</p>
+              <p className="mt-1 max-w-3xl">
+                An independent open-source study tool. Not affiliated with or endorsed by
+                Traficom. Question content is written for practice and is grounded in Finnish
+                statutes (Tieliikennelaki 729/2018, Laki liikenteen palveluista 320/2017) and
+                Traficom guidance; always verify against the current statute and official
+                Traficom material before your exam.
+              </p>
+            </div>
+          </footer>
+        </div>
       </body>
     </html>
   );

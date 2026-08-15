@@ -1,6 +1,7 @@
 'use client';
 
 import { Bookmark, BookmarkCheck, Check, Scale, X } from 'lucide-react';
+import { motion } from 'motion/react';
 
 import { RoadDiagram } from '@/components/RoadDiagram';
 import type { QuizQuestion } from '@/lib/quiz';
@@ -34,13 +35,13 @@ export function QuestionView({
   const isCorrectChoice = selected === question.correctAnswer;
 
   return (
-    <article className="rounded-2xl border border-ink-200 bg-white shadow-sm">
+    <article className="rounded-2xl border border-ink-200 bg-surface shadow-sm">
       <header className="flex flex-wrap items-start justify-between gap-3 border-b border-ink-100 px-5 py-4">
         <div className="flex flex-wrap items-center gap-2">
           {positionLabel ? (
             <span className="text-sm font-semibold text-ink-900">{positionLabel}</span>
           ) : null}
-          <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-700">
+          <span className="rounded-full bg-brand-50 px-2.5 py-1 text-xs font-medium text-brand-400">
             {question.categoryLabel}
           </span>
           {question.categoryNative ? (
@@ -62,7 +63,7 @@ export function QuestionView({
               'flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors',
               bookmarked
                 ? 'border-amber-300 bg-amber-50 text-amber-700'
-                : 'border-ink-200 text-ink-600 hover:bg-ink-50',
+                : 'border-ink-200 text-ink-600 hover:bg-white/5',
             )}
           >
             {bookmarked ? <BookmarkCheck size={14} aria-hidden /> : <Bookmark size={14} aria-hidden />}
@@ -100,12 +101,14 @@ export function QuestionView({
                   onClick={() => onSelect(index)}
                   aria-pressed={isSelected}
                   className={cn(
-                    'flex w-full items-start gap-3 rounded-xl border-2 px-4 py-3 text-left text-sm transition-colors',
-                    'disabled:cursor-default',
-                    showCorrect && 'border-emerald-500 bg-emerald-50',
-                    showWrong && 'border-rose-500 bg-rose-50',
+                    'flex w-full items-start gap-3 rounded-xl border-2 px-4 py-3 text-left text-sm transition-all duration-200',
+                    'disabled:cursor-default active:not-disabled:scale-[0.99]',
+                    showCorrect && 'border-emerald-500/60 bg-emerald-500/10',
+                    showWrong && 'border-rose-500/60 bg-rose-500/10',
                     !revealed && isSelected && 'border-brand-600 bg-brand-50',
-                    !revealed && !isSelected && 'border-ink-200 hover:border-brand-300 hover:bg-brand-50/40',
+                    !revealed &&
+                      !isSelected &&
+                      'border-ink-200 hover:-translate-y-0.5 hover:border-brand-300 hover:bg-brand-50/40 hover:shadow-sm',
                     revealed && !showCorrect && !showWrong && 'border-ink-200 opacity-70',
                   )}
                 >
@@ -138,10 +141,15 @@ export function QuestionView({
         </ul>
 
         {revealed ? (
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: -8, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
               'mt-5 rounded-xl border-l-4 p-4',
-              isCorrectChoice ? 'border-emerald-500 bg-emerald-50' : 'border-rose-500 bg-rose-50',
+              isCorrectChoice
+                ? 'border-emerald-500 bg-emerald-500/10'
+                : 'border-rose-500 bg-rose-500/10',
             )}
           >
             <p className="text-sm font-semibold text-ink-900">
@@ -159,7 +167,7 @@ export function QuestionView({
                 {question.reference}
               </p>
             ) : null}
-          </div>
+          </motion.div>
         ) : null}
       </div>
     </article>

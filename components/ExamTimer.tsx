@@ -28,7 +28,7 @@ export function ExamTimer({
           ? 'animate-pulse border-rose-300 bg-rose-50 text-rose-700'
           : isWarning
             ? 'border-amber-300 bg-amber-50 text-amber-700'
-            : 'border-ink-200 bg-white text-ink-900',
+            : 'border-ink-200 bg-surface text-ink-900',
       )}
     >
       {isWarning ? <AlarmClock size={18} aria-hidden /> : <Clock size={18} aria-hidden />}

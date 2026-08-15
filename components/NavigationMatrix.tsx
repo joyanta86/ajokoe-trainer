@@ -49,14 +49,14 @@ export function NavigationMatrix({
                   isCurrent && 'ring-2 ring-brand-600 ring-offset-1',
                   isAnswered
                     ? 'border-brand-600 bg-brand-600 text-white hover:bg-brand-700'
-                    : 'border-ink-200 bg-white text-ink-600 hover:bg-ink-100',
+                    : 'border-ink-200 bg-surface text-ink-600 hover:bg-white/5',
                 )}
               >
                 {index + 1}
                 {isFlagged ? (
                   <span
                     aria-hidden
-                    className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-amber-500"
+                    className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-surface bg-amber-500"
                   />
                 ) : null}
               </button>
@@ -71,7 +71,7 @@ export function NavigationMatrix({
           <dt>Answered</dt>
         </div>
         <div className="flex items-center gap-2">
-          <span className="h-3 w-3 rounded border border-ink-200 bg-white" aria-hidden />
+          <span className="h-3 w-3 rounded border border-ink-200 bg-surface" aria-hidden />
           <dt>Not answered</dt>
         </div>
         <div className="flex items-center gap-2">

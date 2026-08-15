@@ -33,7 +33,7 @@ import { useTaxiProgressStore } from '@/store/useTaxiProgressStore';
 
 const VERDICT_TONE = {
   excellent: 'text-emerald-700 bg-emerald-50 border-emerald-200',
-  good: 'text-brand-700 bg-brand-50 border-brand-200',
+  good: 'text-brand-400 bg-brand-50 border-brand-200',
   warning: 'text-amber-700 bg-amber-50 border-amber-200',
   danger: 'text-rose-700 bg-rose-50 border-rose-200',
 } as const;
@@ -69,8 +69,8 @@ export default function TaxiDashboardPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
-      <section className="rounded-2xl border border-ink-200 bg-white p-6 shadow-sm sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-wide text-brand-700">
+      <section className="rounded-2xl border border-ink-200 bg-surface p-6 shadow-sm sm:p-8">
+        <p className="text-sm font-semibold uppercase tracking-wide text-brand-400">
           Taksinkuljettajan ajolupakoe
         </p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink-900 sm:text-4xl">
@@ -92,7 +92,7 @@ export default function TaxiDashboardPage() {
           </Link>
           <Link
             href="/taxi/study"
-            className="inline-flex items-center gap-2 rounded-xl border border-ink-200 px-5 py-3 text-sm font-semibold text-ink-800 hover:bg-ink-50"
+            className="inline-flex items-center gap-2 rounded-xl border border-ink-200 px-5 py-3 text-sm font-semibold text-ink-800 hover:bg-white/5"
           >
             <BookOpen size={18} aria-hidden />
             Study by category
@@ -101,10 +101,10 @@ export default function TaxiDashboardPage() {
       </section>
 
       {hydrated && restudyQueue.length > 0 ? (
-        <section className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
+        <section className="mt-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div className="flex items-start gap-3">
-              <span className="mt-0.5 text-amber-700">
+              <span className="mt-0.5 text-amber-400">
                 <Target size={20} aria-hidden />
               </span>
               <div>
@@ -177,7 +177,7 @@ export default function TaxiDashboardPage() {
             action={
               <Link
                 href="/taxi/study"
-                className="hidden shrink-0 items-center gap-1 text-sm font-semibold text-brand-700 hover:underline sm:flex"
+                className="hidden shrink-0 items-center gap-1 text-sm font-semibold text-brand-400 hover:underline sm:flex"
               >
                 Study hub
                 <ArrowRight size={14} aria-hidden />
@@ -189,7 +189,7 @@ export default function TaxiDashboardPage() {
               <Link
                 key={topic.category}
                 href={`/taxi/study/${taxiCategorySlug(topic.category)}`}
-                className="block rounded-xl p-2 transition-colors hover:bg-ink-50"
+                className="block rounded-xl p-2 transition-colors hover:bg-white/5"
               >
                 <div className="flex items-baseline justify-between gap-3">
                   <div>
@@ -232,7 +232,7 @@ export default function TaxiDashboardPage() {
                   <li key={result.id}>
                     <Link
                       href={`/taxi/results?id=${result.id}`}
-                      className="flex items-center justify-between gap-4 py-3 transition-colors hover:bg-ink-50"
+                      className="flex items-center justify-between gap-4 py-3 transition-colors hover:bg-white/5"
                     >
                       <div>
                         <p className="font-medium text-ink-900">{formatExamDate(result.date)}</p>
@@ -290,7 +290,7 @@ export default function TaxiDashboardPage() {
       <div className="mt-6">
         <Link
           href="/taxi/bookmarks"
-          className="flex items-center justify-between gap-4 rounded-2xl border border-ink-200 bg-white p-5 shadow-sm transition-colors hover:bg-ink-50"
+          className="flex items-center justify-between gap-4 rounded-2xl border border-ink-200 bg-surface p-5 shadow-sm transition-colors hover:bg-white/5"
         >
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50 text-amber-700">

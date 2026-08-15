@@ -38,9 +38,9 @@ export default function ExamBriefingPage() {
       </p>
 
       {hasActive ? (
-        <div className="mt-6 rounded-2xl border border-amber-200 bg-amber-50 p-5">
+        <div className="mt-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-5">
           <div className="flex items-start gap-3">
-            <span className="mt-0.5 text-amber-700">
+            <span className="mt-0.5 text-amber-400">
               <Clock size={20} aria-hidden />
             </span>
             <div className="flex-1">
@@ -60,7 +60,7 @@ export default function ExamBriefingPage() {
                 <button
                   type="button"
                   onClick={discardAndRestart}
-                  className="inline-flex items-center gap-2 rounded-lg border border-amber-300 bg-white px-4 py-2.5 text-sm font-semibold text-amber-800 hover:bg-amber-100"
+                  className="inline-flex items-center gap-2 rounded-lg border border-amber-500/40 bg-surface px-4 py-2.5 text-sm font-semibold text-amber-400 hover:bg-amber-500/10"
                 >
                   <RotateCcw size={16} aria-hidden />
                   Discard and start fresh
@@ -115,7 +115,7 @@ export default function ExamBriefingPage() {
         </CardBody>
       </Card>
 
-      <div className="mt-6 rounded-2xl border border-ink-200 bg-white p-5 shadow-sm">
+      <div className="mt-6 rounded-2xl border border-ink-200 bg-surface p-5 shadow-sm">
         <h2 className="flex items-center gap-2 font-semibold text-ink-900">
           <AlertTriangle size={18} className="text-amber-600" aria-hidden />
           Before you start

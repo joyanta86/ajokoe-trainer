@@ -24,7 +24,7 @@ export default function ReviewQuizPage() {
   if (restudyQueue.length === 0) {
     return (
       <div className="mx-auto max-w-2xl px-4 py-20 text-center sm:px-6">
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-700">
+        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-brand-50 text-brand-400">
           <Target size={24} aria-hidden />
         </span>
         <h1 className="mt-4 text-xl font-semibold text-ink-900">No re-study set queued</h1>
@@ -41,7 +41,7 @@ export default function ReviewQuizPage() {
           </Link>
           <Link
             href="/car"
-            className="inline-flex items-center gap-2 rounded-lg border border-ink-200 bg-white px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-ink-50"
+            className="inline-flex items-center gap-2 rounded-lg border border-ink-200 bg-surface px-4 py-2.5 text-sm font-semibold text-ink-700 hover:bg-white/5"
           >
             <Home size={16} aria-hidden />
             Dashboard

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
+import { TaxiLessonNotes } from '@/components/TaxiLessonNotes';
 import { TaxiPracticeRunner } from '@/components/TaxiPracticeRunner';
 import { getTaxiQuestionsByCategory } from '@/data/taxi-questions';
 import {
@@ -10,6 +11,7 @@ import {
   taxiCategoryFromSlug,
   taxiCategorySlug,
 } from '@/lib/taxi-config';
+import { TAXI_LESSONS } from '@/lib/taxi-lessons';
 
 interface PageProps {
   params: Promise<{ category: string }>;
@@ -36,12 +38,17 @@ export default async function TaxiStudyCategoryPage({ params }: PageProps) {
   if (!category) notFound();
 
   return (
-    <TaxiPracticeRunner
-      questions={getTaxiQuestionsByCategory(category)}
-      title={category}
-      subtitle={`${TAXI_CATEGORY_FI[category]} — ${TAXI_CATEGORY_BLURB[category]}`}
-      backHref="/taxi/study"
-      backLabel="Back to taxi study hub"
-    />
+    <>
+      <div className="mx-auto max-w-3xl px-4 pt-8 sm:px-6">
+        <TaxiLessonNotes lesson={TAXI_LESSONS[category]} />
+      </div>
+      <TaxiPracticeRunner
+        questions={getTaxiQuestionsByCategory(category)}
+        title={category}
+        subtitle={`${TAXI_CATEGORY_FI[category]} — ${TAXI_CATEGORY_BLURB[category]}`}
+        backHref="/taxi/study"
+        backLabel="Back to taxi study hub"
+      />
+    </>
   );
 }
